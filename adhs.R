@@ -11,7 +11,7 @@ adhs <- sji.SPSS("adult_dental_health_survey_2009_end_user_licence_270712.sav")
 sji.viewSPSS(adhs)
 
 # Cleansing
-adhs <- adhs[adhs$SHA == 3, ]
+# adhs <- adhs[adhs$SHA == 3, ]
 adhs$Treat[adhs$Treat == 2] <- 0
 # remove people aged > 74
 adhs <- adhs[adhs$ageband1 < 6, ]
@@ -77,7 +77,7 @@ keep <- c("geography.code",
           "Sex..Females..NS.SeC..All.categories..NS.SeC..measures..Value")
 cen <- cen[keep]
 rm(keep)
-names(cen) <- c("lsoacode", "males", "females")
+names(cen) <- c("lsoacode", "male", "female")
 cen <- as.data.frame(cen)
 
 # NSSEC8
@@ -98,7 +98,17 @@ keep <- c("geography.code",
           "Sex..All.persons..NS.SeC..8..Never.worked.and.long.term.unemployed..measures..Value")
 sec <- sec[keep]
 rm(keep)
-names(sec) <- c("lsoacode", "n11", "n12", "n2", "n3", "n4", 
-                "n5", "n6", "n7", "n8")
+names(sec) <- c("lsoacode", "ns11", "ns12", "ns2", "ns3", "ns4", 
+                "ns5", "ns6", "ns7", "ns8")
 cen <- merge(cen, sec, by.x = "lsoacode", by.y = "lsoacode")
+rm(sec)
+
+keep <- c("Serial", "SHA", "Treat", "male", "female",
+          "ns11", "ns12", "ns2", "ns3", "ns4", "ns5", "ns6", "ns7", "ns8")
+adhs <- adhs[keep]
+rm(keep)
+
+adhs <- na.omit(adhs)
+adhs <- as.data.frame(adhs)
+View(adhs)
 View(cen)
